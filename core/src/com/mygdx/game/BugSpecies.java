@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Screen;
 
 /**
+ * data about every species
  * Created by msobczak on 14.01.2018.
  */
 

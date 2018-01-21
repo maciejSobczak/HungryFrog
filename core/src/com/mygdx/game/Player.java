@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 /**
+ * constructor for exact main character object extending general actor class
  * Created by msobczak on 14.01.2018.
  */
 

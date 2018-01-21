@@ -1,3 +1,6 @@
+/**
+ * main screen where all game action happens
+ */
 package com.mygdx.game;
 
 import com.badlogic.gdx.Screen;
@@ -14,8 +17,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.util.Iterator;
-
-import static com.badlogic.gdx.scenes.scene2d.ui.Table.Debug.actor;
 
 public class GameScreen implements Screen {
 
@@ -37,6 +38,10 @@ public class GameScreen implements Screen {
     Window window = null;
     Array<String> seenBugs;
 
+    /**
+     * constructor with all initial settings
+     * @param game
+     */
     public GameScreen(final MyGdxGame game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
@@ -56,6 +61,9 @@ public class GameScreen implements Screen {
         return skin;
     }
 
+    /**
+     * create main caracter object with all features
+     */
     public void createPlayer() {
         String frogImg = "frogOver.png";
         Float x = new Float(Gdx.graphics.getWidth()/2 - 91/2);
@@ -66,6 +74,9 @@ public class GameScreen implements Screen {
         stage.addActor(frog);
     }
 
+    /**
+     * create multiple objects and store in array
+     */
     public void spawnBugs() {
         Float x = new Float(MathUtils.random(0, Gdx.graphics.getWidth()));
         Float y = new Float(Gdx.graphics.getHeight());
@@ -76,6 +87,9 @@ public class GameScreen implements Screen {
         lastBugTime = TimeUtils.nanoTime();
     }
 
+    /**
+     * create multiple bush objects and store in array
+     */
     public void spawnBushes () {
         Float x = new Float(MathUtils.random(0, Gdx.graphics.getWidth()));
         Float y = new Float(Gdx.graphics.getHeight());
@@ -85,6 +99,10 @@ public class GameScreen implements Screen {
         lastBushTime = TimeUtils.nanoTime();
     }
 
+    /**
+     * popup window with information about bug species
+     * @param bug
+     */
     public void generateWindow(Bug bug) {
         isRunning = false;
         window = new Window(bug.bugSpecies, skin, stage);
@@ -96,6 +114,9 @@ public class GameScreen implements Screen {
         window.show(stage);
     }
 
+    /**
+     * update, stop and start action, also switch to another screen (game over)
+     */
     public void updateScene() {
         if(isRunning) {
             updateActors();
@@ -112,6 +133,9 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * all movement and collisions handled for each object
+     */
     public void updateActors() {
         if(Gdx.input.isTouched()) {
             frog.setX(Gdx.input.getX() - frog.getWidth()/2);
@@ -120,7 +144,7 @@ public class GameScreen implements Screen {
         }
 
         if(TimeUtils.nanoTime() - lastBugTime > 500000000) spawnBugs();
-        if(TimeUtils.nanoTime() - lastBushTime > 100000000) spawnBushes();
+        if(TimeUtils.nanoTime() - lastBushTime > 500000000) spawnBushes();
 
         Iterator<Bug> iter = visibleBugs.iterator();
         while(iter.hasNext()) {
@@ -150,6 +174,9 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * draw the game
+     */
     public void renderScene() {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);	//  R,G,B,Y
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

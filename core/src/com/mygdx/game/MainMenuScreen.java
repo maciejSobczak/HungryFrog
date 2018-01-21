@@ -1,3 +1,6 @@
+/**
+ *  Welcome screen
+ */
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
@@ -10,8 +13,11 @@ public class MainMenuScreen implements Screen {
     final MyGdxGame game;
     Texture backgroundImg;
     Texture frogImg;
-    // implemented class Screen does not provide any 'create' method so we create a constructor
-    // the parameter passed into the constructor is an instance of our MyGdxGame class so we can call upon its methods and fields
+
+    /**
+     * constructor setting textures
+     * @param game
+     */
     public MainMenuScreen(final MyGdxGame game) {
         backgroundImg = new Texture(Gdx.files.internal("background.jpg"));
         frogImg = new Texture(Gdx.files.internal("frog.png"));
@@ -23,6 +29,10 @@ public class MainMenuScreen implements Screen {
 
     }
 
+    /**
+     * drawing all
+     * @param data
+     */
     @Override
     public void render(float data) {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
@@ -30,9 +40,10 @@ public class MainMenuScreen implements Screen {
 
         game.batch.begin();
         game.batch.draw(backgroundImg, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        game.batch.draw(frogImg, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 200, 132);
-        game.font.draw(game.batch, "Welcome to the Game!", 300, 400);
-        game.font.draw(game.batch, "Tap anywhere to begin", 300, 300);
+        game.batch.draw(frogImg, Gdx.graphics.getWidth()/2, 500, 200, 132);
+//        game.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        game.font.draw(game.batch, "Welcome to the Game!", 100, 400);
+        game.font.draw(game.batch, "Tap anywhere to begin", 100, 300);
         game.batch.end();
 
         if(Gdx.input.isTouched()) {
