@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.util.Iterator;
 
+import static com.badlogic.gdx.scenes.scene2d.ui.Table.Debug.actor;
+
 public class GameScreen implements Screen {
 
     final MyGdxGame game;
@@ -29,11 +31,11 @@ public class GameScreen implements Screen {
     long lastBugTime;
     long lastBushTime;
     int eatenBugs = 0;
+    int healthPoints = 5;
     Boolean isRunning = true;
     Skin skin;
     Window window = null;
     Array<String> seenBugs;
-
 
     public GameScreen(final MyGdxGame game) {
         this.game = game;
@@ -45,9 +47,8 @@ public class GameScreen implements Screen {
         visibleBugs = new Array<Bug>();
         bushes = new Array<Bush>();
         seenBugs = new Array<String>();
-        spawnBugs();
-        createPlayer();
         skin = generateSkin();
+        createPlayer();
     }
 
     public Skin generateSkin() {
@@ -98,6 +99,10 @@ public class GameScreen implements Screen {
     public void updateScene() {
         if(isRunning) {
             updateActors();
+            frog.toFront();
+            if(healthPoints <= 0) {
+                game.setScreen(new GameOver(game, eatenBugs));
+            }
         }
         else {
             if(window != null && Gdx.input.isTouched()) {
@@ -114,18 +119,21 @@ public class GameScreen implements Screen {
             frog.updateCollisionBox();
         }
 
+        if(TimeUtils.nanoTime() - lastBugTime > 500000000) spawnBugs();
         if(TimeUtils.nanoTime() - lastBushTime > 100000000) spawnBushes();
-        if(TimeUtils.nanoTime() - lastBugTime > 900000000) spawnBugs();
 
         Iterator<Bug> iter = visibleBugs.iterator();
         while(iter.hasNext()) {
             Bug bug = iter.next();
+            bug.toBack();
             bug.setY(bug.getY() - 400 * Gdx.graphics.getDeltaTime());
-            if(bug.getY() + bug.getHeight() < 0) iter.remove();
+            if(bug.getY() + bug.getHeight()*2 < 0) iter.remove();
             if(bug.collidesWith(frog)) {
                 if(!seenBugs.contains(bug.bugSpecies, true)) {
                     generateWindow(bug);
                     seenBugs.add(bug.bugSpecies);
+                } else if(bug.dangerous) {
+                    healthPoints--;
                 }
                 eatenBugs++;
                 iter.remove();
@@ -147,9 +155,12 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.begin();
         game.batch.draw(backgroundImg, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        stage.draw();
         game.batch.end();
+        stage.draw();
+        game.batch.begin();
         game.font.draw(game.batch, "Bugs eaten: " + eatenBugs, 100, Gdx.graphics.getHeight() - 10);
+        game.font.draw(game.batch, "HP: " + healthPoints, Gdx.graphics.getWidth()-300, Gdx.graphics.getHeight() - 10);
+        game.batch.end();
     }
 
     @Override

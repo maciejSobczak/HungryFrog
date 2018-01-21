@@ -23,7 +23,7 @@ public class Window extends Dialog {
         super(title, skin);
         this.stage = stage;
 //        this.button("Option 1", 1L);
-        this.setScale(2.5f);
+        this.setScale(2f);
 
 //        bug.setX(new Float(0.5 * Gdx.graphics.getWidth() + 400 - bug.getWidth()));
 //        bug.setY(new Float(0.5 * Gdx.graphics.getHeight() + 300 - bug.getHeight()));

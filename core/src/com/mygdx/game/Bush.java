@@ -16,6 +16,5 @@ public class Bush extends BasicActor {
 
     public Bush(Float posX, Float posY) {
         super(IMAGE_PATH, WIDTH, HEIGHT, posX, posY);
-        //        bushes.add(new Rectangle(MathUtils.random(0, Gdx.graphics.getWidth()), Gdx.graphics.getHeight(), 500, 283));
     }
 }
